@@ -18,6 +18,9 @@
 	<section>
 		<h2 class="text-2xl font-bold">Our services</h2>
 		<p class="mt-1 text-gray-600">Bookings made: {bookings}</p>
+		<a href="/book" class="mt-4 inline-block rounded bg-gray-900 px-4 py-2 font-semibold text-white">
+			Send a booking request
+		</a>
 
 		<div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
 			{#each services as service}
