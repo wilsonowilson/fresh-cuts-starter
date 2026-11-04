@@ -22,6 +22,11 @@
 					<input type="hidden" name="id" value={booking.id} />
 					<button class="mt-2 text-sm text-red-700 underline">Cancel this booking</button>
 				</form>
+			{:else}
+				<form method="POST" action="?/delete" use:enhance>
+					<input type="hidden" name="id" value={booking.id} />
+					<button class="mt-2 text-sm text-red-700 underline">Delete</button>
+				</form>
 			{/if}
 		</div>
 	{:else}

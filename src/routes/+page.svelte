@@ -1,9 +1,8 @@
 <script>
 	import ServiceCard from '#lib/ServiceCard.svelte';
 	import TipCalculator from '#lib/TipCalculator.svelte';
-	import { services } from '#lib/content.js';
 
-	const popularServices = services.filter((service) => service.popular);
+	let { data } = $props();
 </script>
 
 <svelte:head>
@@ -20,7 +19,7 @@
 		</div>
 
 		<div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
-			{#each popularServices as service}
+			{#each data.services as service}
 				<ServiceCard
 					id={service.id}
 					name={service.name}

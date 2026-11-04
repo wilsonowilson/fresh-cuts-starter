@@ -1,9 +1,12 @@
 import { fail, redirect } from '@sveltejs/kit';
-import { services, days } from '#lib/content.js';
-import { bookings } from '#lib/server/bookings.js';
+import { db } from '#lib/server/db/index.js';
+import { services, bookings } from '#lib/server/db/schema.js';
+import { days } from '#lib/content.js';
 
-export function load() {
-	return { services, days };
+export async function load() {
+	const list = await db.select().from(services).orderBy(services.id);
+
+	return { services: list, days };
 }
 
 export const actions = {
@@ -27,7 +30,8 @@ export const actions = {
 			errors.phone = 'A phone number has 11 digits, like 0803 123 4567.';
 		}
 
-		const service = services.find((item) => item.id === Number(values.service));
+		const list = await db.select().from(services);
+		const service = list.find((item) => item.id === Number(values.service));
 		if (values.service && !service) {
 			errors.service = 'Please choose a service from the list.';
 		}
@@ -40,13 +44,11 @@ export const actions = {
 			return fail(400, { values, errors });
 		}
 
-		bookings.push({
-			id: bookings.length + 1,
+		await db.insert(bookings).values({
 			name: values.name,
 			phone: values.phone,
-			service: service.name,
 			day: values.day,
-			status: 'requested'
+			serviceId: service.id
 		});
 
 		redirect(303, '/book/thanks');
