@@ -5,12 +5,13 @@
 </script>
 
 <svelte:head>
-	<title>Booking requests | Fresh Cuts</title>
-	<meta name="description" content="Every booking request the shop has received." />
+	<title>My bookings | Fresh Cuts</title>
+	<meta name="description" content="The booking requests for you, and only you." />
 </svelte:head>
 
 <main class="mx-auto max-w-xl px-4 py-8">
-	<h1 class="text-2xl font-bold">Booking requests</h1>
+	<h1 class="text-2xl font-bold">Hello, {data.user.name}</h1>
+	<p class="mt-1 text-gray-600">These are your bookings. Other barbers cannot see them.</p>
 
 	{#each data.bookings as booking}
 		<div class="mt-4 rounded-lg border border-gray-200 p-4">
@@ -30,6 +31,6 @@
 			{/if}
 		</div>
 	{:else}
-		<p class="mt-4 text-gray-600">No booking requests yet.</p>
+		<p class="mt-4 text-gray-600">No booking requests for you yet.</p>
 	{/each}
 </main>

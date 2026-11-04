@@ -4,14 +4,14 @@
 	import Header from '#lib/Header.svelte';
 	import Footer from '#lib/Footer.svelte';
 
-	let { children } = $props();
+	let { data, children } = $props();
 </script>
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<Header />
+<Header user={data.user} />
 
 {@render children()}
 

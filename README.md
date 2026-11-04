@@ -3,52 +3,57 @@
 Fresh Cuts is a website for a barbershop in Ikeja, Lagos. Its owner is Mr Tunde. Fresh Cuts is a sample business made
 up for the Zero to Hired course. The address, the phone number and the prices are made up too.
 
-This branch, `end-of-sprint-7`, is the Fresh Cuts project as it is at the end of Sprint 7.
+This branch, `end-of-sprint-8`, is the Fresh Cuts project as it is at the end of Sprint 8.
 
-## You are starting at Sprint 8
+## You are starting at Sprint 10 or 13
 
-Use this copy if you start the course at Sprint 8 and you do not have your own Fresh Cuts project from Sprint 7.
+Use this copy if you start the course at Sprint 10 or later and you do not have your own Fresh Cuts project from Sprint 8. Lesson 10.12, "Keep the cart after a refresh", works in it. Sprint 13's launch lessons practise on a site of yours on Netlify: this copy, put online, works for that.
 
 ### What this copy contains
 
-- Everything from Sprint 6: one header on every page, `/services` with `?category=`, `/services/[id]`, the 404 page, `/book` and `/book/thanks`, the shop's list at `/bookings`, and My visit at `/visit`.
-- The services and the bookings kept in a Postgres database with Drizzle, not in the server's memory.
-- `src/env.js`, which declares `DATABASE_URL`, and `.env.example`, an example of the `.env` file. Your real `.env` is never committed to Git.
-- The schema, `src/lib/server/db/schema.js`: the `services` and `bookings` tables. `bookings.service_id` is a foreign key to `services`.
-- `src/lib/server/db/index.js` (the `db`; in dev it prints the SQL of every query in the terminal) and `drizzle.config.js`.
-- Queries with `eq`, an `innerJoin` on `/bookings`, and insert, update (cancel) and delete.
-- `src/lib/server/db/seed.js`, which adds the eight services to an empty database (`npm run db:seed`).
+- Everything from Sprints 6 and 7: one header on every page, `/services` with `?category=`, `/services/[id]`, the 404 page, `/book` and `/book/thanks`, My visit at `/visit` (`src/lib/cart.svelte.js`), and the services and bookings in Postgres with Drizzle.
+- Barber accounts with Better Auth: `/signup`, `/login`, and a Log out button in the header (`src/lib/server/auth.js`; Better Auth's tables in `src/lib/server/db/auth.schema.js`).
+- `src/hooks.server.js`, which puts the logged-in barber in `locals.user`.
+- `/dashboard`, a protected page: each barber sees and changes only their own bookings. Nobody logged in gives 401; another barber's booking gives 403. The shop's open list at `/bookings` is gone.
+- The booking form asks which barber the booking is for.
+- A password reset by email: `/forgot-password` and `/reset-password` (`src/lib/server/email.js`). With no Resend key, the email is printed in the terminal.
+- A test: `src/lib/prices.test.js` tests `orderTotal`. Run it with `npm test`.
+- `.npmrc` with `legacy-peer-deps=true`, so that `npm install` installs Better Auth with SvelteKit 3.
 - The practice pages from Sprint 2: `/prices` and `/about`.
 
-Anyone can open `/bookings` and cancel any booking. Sprint 8 asks why that is a problem, and adds accounts for the barbers. In Lesson 8.3 you make a new, empty database for that.
+Use a new, empty Neon database for this copy, not your Sprint 7 one: every booking now needs a barber, so old bookings cannot stay.
 
 ### Start
 
-You need Node 22.17 or newer and a free Neon database (neon.tech). Sprint 7 shows how to make one.
+You need Node 22.17 or newer and a free Neon database (neon.tech), new and empty.
 
 ```
-git clone --branch end-of-sprint-7 https://github.com/wilsonowilson/fresh-cuts-starter.git fresh-cuts
+git clone --branch end-of-sprint-8 https://github.com/wilsonowilson/fresh-cuts-starter.git fresh-cuts
 cd fresh-cuts
 npm install
 cp .env.example .env
+npx auth secret
 npm run db:push
 npm run db:seed
 npm run dev
 ```
 
-Before `npm run db:push`, open `.env` and put your own Neon connection string after `DATABASE_URL=` (see below). `npm run db:push` shows the SQL for two tables, then asks a question: press the down arrow once to choose "Yes, I want to execute all statements", then press Enter. `npm run db:seed` prints `Added 8 services.` Run it only once.
+Before `npm run db:push`, open `.env` and put in your own values (see below). `npx auth secret` prints a `BETTER_AUTH_SECRET=…` line: copy its value into `.env`. `npm run db:push` shows the SQL for six tables, then asks a question: press the down arrow once to choose "Yes, I want to execute all statements", then press Enter. `npm run db:seed` prints `Added 8 services.` Run it only once.
 
-Then open `http://localhost:5173` in Chrome. Send a booking request at `/book`, and see it at `/bookings`. Restart the dev server: this time, the booking is still there. To stop the dev server, click in the terminal and press Ctrl+C.
+Then open `http://localhost:5173/signup` in Chrome and make a barber account, for example Tunde Ade, `tunde@freshcuts.ng` (a made-up address). Book at `/book` for that barber, then open `/dashboard`. `npm test` runs the test: 2 tests pass. To stop the dev server, click in the terminal and press Ctrl+C.
 
 ### The values in `.env`
 
 | Name | What to put | Example (not a real one) |
 |---|---|---|
-| `DATABASE_URL` | Your Neon connection string: in Neon, click Connect, show the password, and copy it. | `postgresql://user:password@host.neon.tech/neondb?sslmode=require` |
+| `DATABASE_URL` | Your new Neon database's connection string: in Neon, click Connect, show the password, and copy it. | `postgresql://user:password@host.neon.tech/neondb?sslmode=require` |
+| `ORIGIN` | The address of your site. | `http://localhost:5173` (on Netlify: your site's address) |
+| `BETTER_AUTH_SECRET` | The value that `npx auth secret` prints: 64 letters and digits. | (make your own; never share it) |
+| `RESEND_API_KEY` | Leave it empty while you learn. The reset email is then printed in the terminal. | (empty) |
 
-The app needs `DATABASE_URL` even for `npm run build`. On Netlify, add it under the site's environment variables.
+The app needs every one of these names, even for `npm run build` (`RESEND_API_KEY` may be empty). On Netlify, add them under the site's environment variables, with a different `BETTER_AUTH_SECRET`.
 
-Then open **Lesson 8.1, "Who is this?" (or Lesson 8.2, "Staying logged in", if 8.1 is not open yet)** in the course.
+Then open **Lesson 10.12, "Keep the cart after a refresh" (or the first lesson of the sprint you start)** in the course.
 
 ### Put it on GitHub and Netlify
 
@@ -63,19 +68,21 @@ repository, so first point it at a repository of your own:
    git remote set-url origin https://github.com/your-name/fresh-cuts.git
    git push -u origin main
    ```
-3. On Netlify, add the repository as a new project. Before the first deploy, add `DATABASE_URL` in the site's environment variables.
+3. On Netlify, add the repository as a new project. Before the first deploy, add `DATABASE_URL`, `ORIGIN`, `BETTER_AUTH_SECRET` and `RESEND_API_KEY` in the site's environment variables.
 
 ## What is inside
 
 | File or folder | What it does |
 |---|---|
-| `.env.example` | An example of `.env`. Copy it to `.env` and put your own value in it. |
-| `src/env.js` | The list of environment variables the app needs: `DATABASE_URL`. |
-| `drizzle.config.js` | Where the schema is, and which database `drizzle-kit push` sends it to. |
-| `src/lib/server/db/schema.js` | The tables: `services` and `bookings`. |
-| `src/lib/server/db/index.js` | The `db` that every server file uses. |
-| `src/lib/server/db/seed.js` | Adds the eight services, once. |
-| `src/routes/` | The pages. Each `+page.server.js` reads or changes the database. |
-| `package.json` | The commands: `dev`, `build`, `db:push`, `db:seed`, `db:studio`. |
+| `.env.example` | An example of `.env`, with the four names. Copy it to `.env` and put your own values in it. |
+| `src/env.js` | The list of environment variables the app needs. |
+| `src/hooks.server.js` | Puts the logged-in barber in `locals.user`, for every request. |
+| `src/lib/server/auth.js` | Better Auth: accounts, sessions and the reset email. |
+| `src/lib/server/db/schema.js`, `auth.schema.js` | The tables: `services` and `bookings` (each with a `user_id`), and Better Auth's four tables. |
+| `src/lib/server/email.js` | Sends an email with Resend, or prints it in the terminal. |
+| `src/routes/dashboard/` | The barber's own bookings, with cancel and delete. |
+| `src/routes/signup/`, `login/`, `logout/`, `forgot-password/`, `reset-password/` | The account pages. |
+| `src/lib/prices.test.js` | The test for `orderTotal`. |
+| `package.json` | The commands: `dev`, `build`, `test`, `db:push`, `db:seed`, `db:studio`, `auth:schema`. |
 
-Pages: `/`, `/services`, `/services?category=beard`, `/services/2`, `/visit`, `/book`, `/book/thanks`, `/bookings`, `/prices`, `/about`.
+Pages: `/`, `/services`, `/services?category=beard`, `/services/2`, `/visit`, `/book`, `/book/thanks`, `/signup`, `/login`, `/forgot-password`, `/reset-password`, `/dashboard`, `/prices`, `/about`.

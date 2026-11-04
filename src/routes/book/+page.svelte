@@ -63,6 +63,19 @@
 			<p class="text-sm text-red-700">{form.errors.day}</p>
 		{/if}
 
+		<label>
+			<span class="text-gray-700">Barber</span>
+			<select name="barber" value={form?.values?.barber ?? ''} class="mt-1 block w-full rounded border border-gray-300 p-2">
+				<option value="">Choose a barber</option>
+				{#each data.barbers as barber}
+					<option value={barber.id}>{barber.name}</option>
+				{/each}
+			</select>
+		</label>
+		{#if form?.errors?.barber}
+			<p class="text-sm text-red-700">{form.errors.barber}</p>
+		{/if}
+
 		<button class="rounded bg-gray-900 px-4 py-2 font-semibold text-white">Send request</button>
 	</form>
 </main>

@@ -1,4 +1,5 @@
 import { pgTable, serial, text, integer, boolean, timestamp } from 'drizzle-orm/pg-core';
+import { user } from './auth.schema.js';
 
 export const services = pgTable('services', {
 	id: serial('id').primaryKey(),
@@ -19,5 +20,8 @@ export const bookings = pgTable('bookings', {
 	serviceId: integer('service_id')
 		.notNull()
 		.references(() => services.id),
+	userId: text('user_id')
+		.notNull()
+		.references(() => user.id),
 	createdAt: timestamp('created_at').notNull().defaultNow()
 });

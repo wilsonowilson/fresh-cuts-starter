@@ -1,7 +1,7 @@
+import { defineConfig } from 'vitest/config';
 import tailwindcss from '@tailwindcss/vite';
 import adapter from '@sveltejs/adapter-netlify';
 import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig } from 'vite';
 
 export default defineConfig({
 	plugins: [
@@ -14,5 +14,8 @@ export default defineConfig({
 			},
 			adapter: adapter()
 		})
-	]
+	],
+	test: {
+		include: ['src/**/*.test.js']
+	}
 });

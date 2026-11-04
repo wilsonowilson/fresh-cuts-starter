@@ -2,6 +2,8 @@
 	import { cart } from '#lib/cart.svelte.js';
 	import { orderTotal } from '#lib/prices.js';
 
+	let { user } = $props();
+
 	const shopName = 'Fresh Cuts';
 	const phone = '0803 123 4567';
 	const isOpen = true;
@@ -24,6 +26,14 @@
 			<a href="/book" class="underline">Book</a>
 			<a href="/visit" class="underline">My visit: {cart.items.length} (₦{total.toLocaleString()})</a>
 			<a href="tel:08031234567" class="font-semibold underline">Call {phone}</a>
+			{#if user}
+				<a href="/dashboard" class="underline">Dashboard</a>
+				<form method="POST" action="/logout">
+					<button class="underline">Log out</button>
+				</form>
+			{:else}
+				<a href="/login" class="underline">Barbers: log in</a>
+			{/if}
 		</nav>
 	</div>
 </header>
